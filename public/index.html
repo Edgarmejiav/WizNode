@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Studio Light • Dark</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #FFFFFF;
+            font-family: -apple-system, system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass {
+            background: rgba(28, 28, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            background: #3a3a3c;
+            height: 40px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 0;
+            box-shadow: -400px 0 0 400px #ffffff;
+        }
+        .btn-active {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center p-6 min-h-screen">
+
+<header class="w-full max-w-md mt-8 mb-12 text-left">
+    <h1 class="text-3xl font-bold tracking-tight">Estudio</h1>
+    <p class="text-gray-500 text-lg">Iluminación Inteligente</p>
+</header>
+
+<div class="w-full max-w-md space-y-6">
+
+    <div class="glass p-5 rounded-[24px]">
+        <div class="flex justify-between mb-4 px-1">
+            <span class="text-sm font-medium text-gray-400 uppercase tracking-widest">Brillo</span>
+            <span id="pct" class="text-sm text-white">100%</span>
+        </div>
+        <input type="range" min="10" max="100" value="100" class="w-full cursor-pointer"
+               oninput="updateUI(this.value)" onchange="send('dimming', parseInt(this.value))">
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <button onclick="send('scene', 9)" class="glass p-6 rounded-[24px] flex flex-col items-center gap-3 active:scale-95 transition-transform">
+            <span class="text-2xl">🔥</span>
+            <span class="text-xs font-semibold uppercase tracking-tight">Fireplace</span>
+        </button>
+        <button onclick="send('scene', 7)" class="glass p-6 rounded-[24px] flex flex-col items-center gap-3 active:scale-95 transition-transform">
+            <span class="text-2xl">🌲</span>
+            <span class="text-xs font-semibold uppercase tracking-tight">Forest</span>
+        </button>
+        <button onclick="send('scene', 4)" class="glass p-6 rounded-[24px] flex flex-col items-center gap-3 active:scale-95 transition-transform">
+            <span class="text-2xl">🎉</span>
+            <span class="text-xs font-semibold uppercase tracking-tight">Party</span>
+        </button>
+        <button onclick="send('scene', 2)" class="glass p-6 rounded-[24px] flex flex-col items-center gap-3 active:scale-95 transition-transform">
+            <span class="text-2xl">💖</span>
+            <span class="text-xs font-semibold uppercase tracking-tight">Romance</span>
+        </button>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+        <button onclick="send('mode', 'dia')" class="bg-white text-black p-5 rounded-[22px] font-bold active:opacity-80">
+            Enfoque Día
+        </button>
+        <button onclick="send('mode', 'noche')" class="glass text-white p-5 rounded-[22px] font-bold active:opacity-80">
+            Noche
+        </button>
+    </div>
+
+    <button onclick="send('mode', 'off')" class="w-full py-5 text-gray-500 font-medium hover:text-red-500 transition-colors">
+        Apagar Sistema
+    </button>
+</div>
+
+<script>
+    function updateUI(val) {
+        document.getElementById('pct').innerText = val + '%';
+    }
+
+    async function send(type, value) {
+        await fetch('/control', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type, value })
+        });
+    }
+</script>
+</body>
+</html>
