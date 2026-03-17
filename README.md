@@ -45,6 +45,8 @@ A lightweight Node.js web application to control a WiZ smart bulb over your loca
 - **Backend:** Express.js to serve the static frontend and handle API requests.
 - **Communication:** The `dgram` module is used to send UDP packets (`setPilot` method) on port `38899`, which is the standard port for WiZ bulbs local communication.
 - **Frontend:** HTML/CSS/JS served from the `public` directory.
+  
+<img width="1920" height="1048" alt="image" src="https://github.com/user-attachments/assets/1db02077-1a10-47fd-825d-f59b55eb2aa5" />
 
 ## License
 
